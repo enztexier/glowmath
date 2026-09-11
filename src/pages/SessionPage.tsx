@@ -219,17 +219,19 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
           <div className="question">
             {config.answer.inputMode === 'trueFalse' && runtime.trueFalseStatement ? (
               runtime.trueFalseStatement.displayText
-            ) : showCorrection ? (
-              <>
-                {runtime.question.displayText.replace('?', '')}
-                <span
-                  className={`answer-inline-slot ${isPassiveReveal ? 'neutral' : runtime.lastAnswer?.isCorrect ? 'correct' : 'incorrect'}`}
-                >
-                  {runtime.question.correctAnswerDisplay}
-                </span>
-              </>
             ) : (
-              runtime.question.displayText
+              <>
+                {runtime.question.displayText.slice(0, -1)}
+                {showCorrection ? (
+                  <span
+                    className={`answer-inline-slot ${isPassiveReveal ? 'neutral' : runtime.lastAnswer?.isCorrect ? 'correct' : 'incorrect'}`}
+                  >
+                    {runtime.question.correctAnswerDisplay}
+                  </span>
+                ) : (
+                  <span className="answer-inline-slot neutral">?</span>
+                )}
+              </>
             )}
           </div>
         )}
