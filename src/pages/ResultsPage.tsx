@@ -66,6 +66,10 @@ function ResultsView({
     navigate('/session', { state: { config } })
   }
 
+  function handleEditSettings() {
+    navigate('/config', { state: { config } })
+  }
+
   return (
     <div className="results-wrap">
       <div className="score-card">
@@ -142,6 +146,9 @@ function ResultsView({
         <Link to="/" className="btn secondary">
           Retour à l'accueil
         </Link>
+        <button type="button" className="btn secondary" onClick={handleEditSettings}>
+          Modifier les réglages
+        </button>
         <button type="button" className="btn primary" onClick={handleRelaunch}>
           Relancer →
         </button>

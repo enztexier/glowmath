@@ -42,8 +42,16 @@
   background: var(--color-card-bg);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  padding: 4px 20px;
+  padding: 16px 20px;
   margin-bottom: 16px;
+}
+
+.panel > .config-row-title {
+  margin-bottom: 8px;
+}
+
+.panel > .config-row-hint {
+  margin-bottom: 12px;
 }
 
 .config-row {
@@ -166,6 +174,32 @@
 .qcount-opt.selected {
   background: var(--color-selected);
   color: var(--color-selected-text);
+}
+
+.qcount-custom {
+  width: 76px;
+  padding: 10px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--color-line);
+  background: var(--color-panel);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--color-ink);
+  text-align: center;
+}
+
+.spaced {
+  margin-top: 16px;
+}
+
+.acc-note {
+  font-size: 12px;
+  color: var(--color-ink-soft);
+  background: var(--color-panel);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin: 0 0 12px;
 }
 
 /* Advanced accordion */

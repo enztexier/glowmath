@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import type { Operation, SessionConfig } from '../engine/types'
 import { createDefaultConfig } from '../engine/defaultConfig'
 import { difficultyLabels, difficultyPresets, findPresetById } from '../engine/presets'
@@ -7,6 +7,7 @@ import type { SimpleDifficulty } from '../engine/presets'
 import { getConfigById, saveConfig } from '../storage/localConfigStore'
 import OperationChips from '../components/config/OperationChips'
 import AccordionItem from '../components/config/AccordionItem'
+import NumberField from '../components/config/NumberField'
 import ToggleSwitch from '../components/ui/ToggleSwitch'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { sanitizeNumberList } from '../lib/sanitizeInput'
@@ -25,8 +26,31 @@ const ALL_OPERATIONS: Operation[] = [
   'rounding',
 ]
 const QUESTION_COUNT_OPTIONS = [10, 20, 30, 50]
+const TOTAL_TIME_OPTIONS = [30, 60, 90, 120]
 
-function resolveInitialConfig(searchParams: URLSearchParams): SessionConfig {
+const SESSION_MODE_OPTIONS: { value: SessionConfig['session']['mode']; label: string }[] = [
+  { value: 'fixedCount', label: 'Nombre fixe' },
+  { value: 'totalTime', label: 'Chrono' },
+  { value: 'survival', label: 'Survie' },
+  { value: 'training', label: 'Libre (infini)' },
+]
+
+const ANSWER_MODE_OPTIONS: { value: SessionConfig['answer']['inputMode']; label: string }[] = [
+  { value: 'keyboard', label: 'Clavier' },
+  { value: 'mcq', label: 'QCM' },
+  { value: 'trueFalse', label: 'Vrai / Faux' },
+  { value: 'knewOrNot', label: 'Voir la réponse' },
+]
+
+function locationHasConfig(locationState: unknown): boolean {
+  return Boolean((locationState as { config?: SessionConfig } | null)?.config)
+}
+
+function resolveInitialConfig(searchParams: URLSearchParams, locationState: unknown): SessionConfig {
+  if (locationHasConfig(locationState)) {
+    return (locationState as { config: SessionConfig }).config
+  }
+
   const configId = searchParams.get('configId')
   if (configId) {
     const saved = getConfigById(configId)
@@ -55,23 +79,6 @@ function numberTypesStatus(config: SessionConfig): string {
   return labels.length > 0 ? labels.join(', ') : 'Aucun'
 }
 
-function sessionStatus(config: SessionConfig): string {
-  if (config.session.mode === 'fixedCount') return `${config.session.questionCount ?? 20} questions`
-  if (config.session.mode === 'totalTime') return `${config.session.totalTimeSeconds ?? 60} s`
-  if (config.session.mode === 'survival') return 'Survie'
-  return 'Entraînement'
-}
-
-function answerStatus(config: SessionConfig): string {
-  const labels: Record<SessionConfig['answer']['inputMode'], string> = {
-    keyboard: 'Clavier',
-    mcq: 'QCM',
-    trueFalse: 'Vrai/Faux',
-    knewOrNot: 'Je savais',
-  }
-  return labels[config.answer.inputMode]
-}
-
 function correctionStatus(config: SessionConfig): string {
   const labels: Record<SessionConfig['correction']['mode'], string> = {
     immediate: 'Immédiate',
@@ -91,8 +98,14 @@ export default function ConfigPage() {
   })
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const [config, setConfig] = useState<SessionConfig>(() => resolveInitialConfig(searchParams))
-  const [mode, setMode] = useState<'simple' | 'advanced'>('simple')
+  const location = useLocation()
+  const [config, setConfig] = useState<SessionConfig>(() => resolveInitialConfig(searchParams, location.state))
+  // Editing an already fully-formed config (e.g. "Modifier les réglages" from the results
+  // page) opens on the Avancé tab: Simple can't represent every mode (Chrono, Survie, QCM…),
+  // so showing it here would silently hide or misrepresent settings the session actually used.
+  const [mode, setMode] = useState<'simple' | 'advanced'>(() =>
+    (locationHasConfig(location.state) || searchParams.get('configId') || searchParams.get('preset')) ? 'advanced' : 'simple',
+  )
   const [simpleDifficulty, setSimpleDifficulty] = useState<SimpleDifficulty>('medium')
   const [showSaveField, setShowSaveField] = useState(false)
   const [savedName, setSavedName] = useState('')
@@ -114,6 +127,26 @@ export default function ConfigPage() {
 
   function setQuestionCount(count: number) {
     setConfig((current) => ({ ...current, session: { mode: 'fixedCount', questionCount: count } }))
+  }
+
+  function setSessionMode(nextMode: SessionConfig['session']['mode']) {
+    if (nextMode === 'fixedCount') updateSession({ mode: nextMode, questionCount: config.session.questionCount ?? 20 })
+    else if (nextMode === 'totalTime') updateSession({ mode: nextMode, totalTimeSeconds: config.session.totalTimeSeconds ?? 60 })
+    else updateSession({ mode: nextMode })
+  }
+
+  function setAnswerMode(nextMode: SessionConfig['answer']['inputMode']) {
+    if (nextMode === 'knewOrNot') {
+      // Passive reveal needs an immediate correction to auto-advance once the answer is shown.
+      updateAnswer({ inputMode: nextMode })
+      updateTiming({ responseTimeSeconds: revealSeconds })
+      updateCorrection({ mode: 'immediate' })
+    } else if (config.answer.inputMode === 'knewOrNot') {
+      updateAnswer({ inputMode: nextMode })
+      updateTiming({ responseTimeSeconds: null })
+    } else {
+      updateAnswer({ inputMode: nextMode })
+    }
   }
 
   function updateNumberType<K extends 'integer' | 'decimal' | 'fraction'>(
@@ -311,106 +344,119 @@ export default function ConfigPage() {
         ) : (
         <>
         <div className="panel">
-          <div className="field-label">Options rapides</div>
+          <div className="config-row-title">Opérations</div>
+          <OperationChips operations={ALL_OPERATIONS} selected={config.operations} onToggle={toggleOperation} />
+        </div>
 
-          <div className="config-row">
-            <div className="config-row-text">
-              <div className="config-row-title">Aléatoire</div>
-              <div className="config-row-hint">Les questions sont toujours mélangées</div>
-            </div>
-            <span className="config-row-locked">
-              <ToggleSwitch checked onChange={() => {}} label="Aléatoire" />
-            </span>
+        <div className="panel">
+          <div className="config-row-title">Format de la série</div>
+          <div className="config-row-hint">Les questions sont toujours mélangées</div>
+          <div className="chips spaced">
+            {SESSION_MODE_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                className={`chip${config.session.mode === opt.value ? ' selected' : ''}`}
+                aria-pressed={config.session.mode === opt.value}
+                onClick={() => setSessionMode(opt.value)}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
 
-          <div className="config-row">
-            <div className="config-row-text">
-              <div className="config-row-title">À l'infini</div>
-              <div className="config-row-hint">La série continue sans limite de questions</div>
-            </div>
-            <ToggleSwitch
-              checked={config.session.mode === 'training'}
-              onChange={(v) =>
-                updateSession(v ? { mode: 'training' } : { mode: 'fixedCount', questionCount: config.session.questionCount ?? 20 })
-              }
-              label="À l'infini"
-            />
-          </div>
-
-          <div className="config-row">
-            <div className="config-row-text">
-              <div className="config-row-title">Remplir à la main</div>
-              <div className="config-row-hint">Tape la réponse au clavier</div>
-            </div>
-            <ToggleSwitch
-              checked={config.answer.inputMode === 'keyboard'}
-              onChange={(v) => {
-                if (v) {
-                  updateAnswer({ inputMode: 'keyboard' })
-                  updateTiming({ responseTimeSeconds: null })
-                  updateCorrection({ mode: 'immediate' })
-                } else {
-                  updateAnswer({ inputMode: 'knewOrNot' })
-                  updateTiming({ responseTimeSeconds: revealSeconds })
-                  updateCorrection({ mode: 'immediate' })
-                }
-              }}
-              label="Remplir à la main"
-            />
-          </div>
-
-          <div className="config-row column">
-            <div className="config-row-header">
-              <div className="config-row-text">
-                <div className="config-row-title">Voir la réponse après</div>
-                <div className="config-row-hint">La réponse s'affiche toute seule, puis la question suivante arrive</div>
-              </div>
-              <ToggleSwitch
-                checked={config.answer.inputMode === 'knewOrNot'}
-                onChange={(v) => {
-                  if (v) {
-                    updateAnswer({ inputMode: 'knewOrNot' })
-                    updateTiming({ responseTimeSeconds: revealSeconds })
-                    updateCorrection({ mode: 'immediate' })
-                  } else {
-                    updateAnswer({ inputMode: 'keyboard' })
-                    updateTiming({ responseTimeSeconds: null })
-                    updateCorrection({ mode: 'immediate' })
-                  }
-                }}
-                label="Voir la réponse après"
+          {config.session.mode === 'fixedCount' && (
+            <div className="qcount-row spaced">
+              {QUESTION_COUNT_OPTIONS.map((count) => (
+                <div
+                  key={count}
+                  className={`qcount-opt${config.session.questionCount === count ? ' selected' : ''}`}
+                  onClick={() => setQuestionCount(count)}
+                >
+                  {count}
+                </div>
+              ))}
+              <input
+                type="number"
+                min={1}
+                className="qcount-custom"
+                aria-label="Nombre de questions personnalisé"
+                value={config.session.questionCount ?? 20}
+                onChange={(e) => updateSession({ mode: 'fixedCount', questionCount: Number(e.target.value) })}
               />
             </div>
-            {config.answer.inputMode === 'knewOrNot' && (
-              <>
-                <div className="config-row-hint">
-                  {revealSeconds} seconde{revealSeconds > 1 ? 's' : ''}
+          )}
+
+          {config.session.mode === 'totalTime' && (
+            <div className="qcount-row spaced">
+              {TOTAL_TIME_OPTIONS.map((seconds) => (
+                <div
+                  key={seconds}
+                  className={`qcount-opt${config.session.totalTimeSeconds === seconds ? ' selected' : ''}`}
+                  onClick={() => updateSession({ totalTimeSeconds: seconds })}
+                >
+                  {seconds}s
                 </div>
-                <input
-                  type="range"
-                  min={1}
-                  max={60}
-                  value={revealSeconds}
-                  onChange={(e) => updateTiming({ responseTimeSeconds: Number(e.target.value) })}
-                  className="config-slider"
-                  aria-label="Voir la réponse après combien de secondes"
-                />
-              </>
-            )}
+              ))}
+              <input
+                type="number"
+                min={10}
+                className="qcount-custom"
+                aria-label="Durée personnalisée en secondes"
+                value={config.session.totalTimeSeconds ?? 60}
+                onChange={(e) => updateSession({ totalTimeSeconds: Number(e.target.value) })}
+              />
+            </div>
+          )}
+
+          <div className="config-row-title spaced">Réponse</div>
+          <div className="chips">
+            {ANSWER_MODE_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                className={`chip${config.answer.inputMode === opt.value ? ' selected' : ''}`}
+                aria-pressed={config.answer.inputMode === opt.value}
+                onClick={() => setAnswerMode(opt.value)}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
-          {(config.answer.inputMode === 'mcq' || config.answer.inputMode === 'trueFalse') && (
-            <p className="config-row-hint">
-              Saisie actuelle : {config.answer.inputMode === 'mcq' ? 'QCM' : 'Vrai / Faux'} (réglable dans « Réponse » ci-dessous).
-            </p>
+
+          {config.answer.inputMode === 'mcq' && (
+            <div className="field-row spaced">
+              <span>Nombre de choix</span>
+              <input
+                type="number"
+                min={2}
+                max={6}
+                value={config.answer.mcqChoicesCount ?? 4}
+                onChange={(e) => updateAnswer({ mcqChoicesCount: Number(e.target.value) })}
+              />
+            </div>
+          )}
+
+          {config.answer.inputMode === 'knewOrNot' && (
+            <div className="spaced">
+              <div className="config-row-hint">
+                La réponse s'affiche seule après {revealSeconds} seconde{revealSeconds > 1 ? 's' : ''}, puis la question suivante arrive.
+              </div>
+              <input
+                type="range"
+                min={1}
+                max={60}
+                value={revealSeconds}
+                onChange={(e) => updateTiming({ responseTimeSeconds: Number(e.target.value) })}
+                className="config-slider"
+                aria-label="Voir la réponse après combien de secondes"
+              />
+            </div>
           )}
         </div>
 
         <div className="accordion visible">
-          <AccordionItem title="Opérations" status={`${config.operations.length} sélectionnée(s)`}>
-            <OperationChips operations={ALL_OPERATIONS} selected={config.operations} onToggle={toggleOperation} />
-          </AccordionItem>
-
-          <AccordionItem title="Types de nombres" status={numberTypesStatus(config)}>
+          <AccordionItem title="Personnaliser les nombres" status={numberTypesStatus(config)} defaultOpen>
             <div className="subrow">
               <span>Entiers</span>
               <ToggleSwitch checked={config.numberTypes.integer.enabled} onChange={(v) => updateNumberType('integer', { enabled: v })} />
@@ -419,18 +465,20 @@ export default function ConfigPage() {
               <div className="subfields">
                 <label>
                   Min
-                  <input
-                    type="number"
+                  <NumberField
                     value={config.numberTypes.integer.min}
-                    onChange={(e) => updateNumberType('integer', { min: Number(e.target.value) })}
+                    onCommit={(v) => updateNumberType('integer', { min: v })}
+                    allowNegative
+                    aria-label="Entiers min"
                   />
                 </label>
                 <label>
                   Max
-                  <input
-                    type="number"
+                  <NumberField
                     value={config.numberTypes.integer.max}
-                    onChange={(e) => updateNumberType('integer', { max: Number(e.target.value) })}
+                    onCommit={(v) => updateNumberType('integer', { max: v })}
+                    allowNegative
+                    aria-label="Entiers max"
                   />
                 </label>
               </div>
@@ -444,28 +492,28 @@ export default function ConfigPage() {
               <div className="subfields">
                 <label>
                   Décimales
-                  <input
-                    type="number"
-                    min={1}
-                    max={4}
+                  <NumberField
                     value={config.numberTypes.decimal.decimals}
-                    onChange={(e) => updateNumberType('decimal', { decimals: Number(e.target.value) })}
+                    onCommit={(v) => updateNumberType('decimal', { decimals: v })}
+                    aria-label="Décimales"
                   />
                 </label>
                 <label>
                   Min
-                  <input
-                    type="number"
+                  <NumberField
                     value={config.numberTypes.decimal.min}
-                    onChange={(e) => updateNumberType('decimal', { min: Number(e.target.value) })}
+                    onCommit={(v) => updateNumberType('decimal', { min: v })}
+                    allowNegative
+                    aria-label="Décimaux min"
                   />
                 </label>
                 <label>
                   Max
-                  <input
-                    type="number"
+                  <NumberField
                     value={config.numberTypes.decimal.max}
-                    onChange={(e) => updateNumberType('decimal', { max: Number(e.target.value) })}
+                    onCommit={(v) => updateNumberType('decimal', { max: v })}
+                    allowNegative
+                    aria-label="Décimaux max"
                   />
                 </label>
               </div>
@@ -479,10 +527,10 @@ export default function ConfigPage() {
               <div className="subfields">
                 <label>
                   Numérateur max
-                  <input
-                    type="number"
+                  <NumberField
                     value={config.numberTypes.fraction.numeratorMax}
-                    onChange={(e) => updateNumberType('fraction', { numeratorMax: Number(e.target.value) })}
+                    onCommit={(v) => updateNumberType('fraction', { numeratorMax: v })}
+                    aria-label="Numérateur max"
                   />
                 </label>
                 <label>
@@ -518,10 +566,8 @@ export default function ConfigPage() {
               <span>Nombres négatifs</span>
               <ToggleSwitch checked={config.numberTypes.allowNegative} onChange={toggleAllowNegative} />
             </div>
-          </AccordionItem>
 
-          <AccordionItem title="Difficulté" status={`${config.difficulty.operandsCount} opérandes`}>
-            <div className="field-row">
+            <div className="field-row spaced">
               <span>Nombre d'opérandes</span>
               <select
                 value={config.difficulty.operandsCount}
@@ -563,129 +609,78 @@ export default function ConfigPage() {
             </div>
             <div className="field-row">
               <span>Exposant max (puissances)</span>
-              <input
-                type="number"
-                min={2}
-                max={6}
+              <NumberField
                 value={config.difficulty.maxPowerExponent ?? 3}
-                onChange={(e) => updateDifficulty({ maxPowerExponent: Number(e.target.value) })}
+                onCommit={(v) => updateDifficulty({ maxPowerExponent: v })}
+                aria-label="Exposant max"
               />
             </div>
           </AccordionItem>
 
-          <AccordionItem title="Format de session" status={sessionStatus(config)}>
-            <div className="field-row">
-              <span>Mode</span>
-              <select
-                value={config.session.mode}
-                onChange={(e) => {
-                  const nextMode = e.target.value as SessionConfig['session']['mode']
-                  if (nextMode === 'fixedCount') updateSession({ mode: nextMode, questionCount: config.session.questionCount ?? 20 })
-                  else if (nextMode === 'totalTime') updateSession({ mode: nextMode, totalTimeSeconds: config.session.totalTimeSeconds ?? 60 })
-                  else updateSession({ mode: nextMode })
-                }}
-              >
-                <option value="fixedCount">Nombre fixe de questions</option>
-                <option value="totalTime">Chrono</option>
-                <option value="survival">Survie</option>
-                <option value="training">Entraînement libre</option>
-              </select>
-            </div>
-            {config.session.mode === 'fixedCount' && (
-              <div className="field-row">
-                <span>Nombre de questions</span>
-                <input
-                  type="number"
-                  min={1}
-                  value={config.session.questionCount ?? 20}
-                  onChange={(e) => updateSession({ questionCount: Number(e.target.value) })}
-                />
-              </div>
+          <AccordionItem title="Correction avancée" status={correctionStatus(config)}>
+            {config.answer.inputMode === 'knewOrNot' ? (
+              <>
+                <p className="acc-note">
+                  Correction immédiate imposée par « Voir la réponse » ci-dessus. Le délai de révélation se règle avec le curseur
+                  au-dessus ; seul l'affichage de la correction se règle ici.
+                </p>
+                <div className="field-row">
+                  <span>Affichage correction (secondes)</span>
+                  <input
+                    type="number"
+                    min={1}
+                    value={config.timing.correctionDisplaySeconds}
+                    onChange={(e) => updateTiming({ correctionDisplaySeconds: Number(e.target.value) })}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="field-row">
+                  <span>Correction</span>
+                  <select
+                    value={config.correction.mode}
+                    onChange={(e) => updateCorrection({ mode: e.target.value as SessionConfig['correction']['mode'] })}
+                  >
+                    <option value="immediate">Immédiate</option>
+                    <option value="delayed">Différée</option>
+                    <option value="onDemand">À la demande</option>
+                    <option value="endOfSeries">Fin de série</option>
+                    <option value="none">Aucune</option>
+                  </select>
+                </div>
+                {config.correction.mode === 'delayed' && (
+                  <div className="field-row">
+                    <span>Délai (secondes)</span>
+                    <input
+                      type="number"
+                      min={1}
+                      value={config.correction.delaySeconds ?? 3}
+                      onChange={(e) => updateCorrection({ delaySeconds: Number(e.target.value) })}
+                    />
+                  </div>
+                )}
+                <div className="field-row">
+                  <span>Temps de réponse (secondes)</span>
+                  <input
+                    type="number"
+                    min={0}
+                    placeholder="Illimité"
+                    value={config.timing.responseTimeSeconds ?? ''}
+                    onChange={(e) => updateTiming({ responseTimeSeconds: e.target.value === '' ? null : Number(e.target.value) })}
+                  />
+                </div>
+                <div className="field-row">
+                  <span>Affichage correction (secondes)</span>
+                  <input
+                    type="number"
+                    min={1}
+                    value={config.timing.correctionDisplaySeconds}
+                    onChange={(e) => updateTiming({ correctionDisplaySeconds: Number(e.target.value) })}
+                  />
+                </div>
+              </>
             )}
-            {config.session.mode === 'totalTime' && (
-              <div className="field-row">
-                <span>Durée (secondes)</span>
-                <input
-                  type="number"
-                  min={10}
-                  value={config.session.totalTimeSeconds ?? 60}
-                  onChange={(e) => updateSession({ totalTimeSeconds: Number(e.target.value) })}
-                />
-              </div>
-            )}
-          </AccordionItem>
-
-          <AccordionItem title="Réponse" status={answerStatus(config)}>
-            <div className="field-row">
-              <span>Saisie</span>
-              <select
-                value={config.answer.inputMode}
-                onChange={(e) => updateAnswer({ inputMode: e.target.value as SessionConfig['answer']['inputMode'] })}
-              >
-                <option value="keyboard">Clavier</option>
-                <option value="mcq">QCM</option>
-                <option value="trueFalse">Vrai / Faux</option>
-                <option value="knewOrNot">Je savais / Je ne savais pas</option>
-              </select>
-            </div>
-            {config.answer.inputMode === 'mcq' && (
-              <div className="field-row">
-                <span>Nombre de choix</span>
-                <input
-                  type="number"
-                  min={2}
-                  max={6}
-                  value={config.answer.mcqChoicesCount ?? 4}
-                  onChange={(e) => updateAnswer({ mcqChoicesCount: Number(e.target.value) })}
-                />
-              </div>
-            )}
-          </AccordionItem>
-
-          <AccordionItem title="Correction & chronométrage" status={correctionStatus(config)}>
-            <div className="field-row">
-              <span>Correction</span>
-              <select
-                value={config.correction.mode}
-                onChange={(e) => updateCorrection({ mode: e.target.value as SessionConfig['correction']['mode'] })}
-              >
-                <option value="immediate">Immédiate</option>
-                <option value="delayed">Différée</option>
-                <option value="onDemand">À la demande</option>
-                <option value="endOfSeries">Fin de série</option>
-                <option value="none">Aucune</option>
-              </select>
-            </div>
-            {config.correction.mode === 'delayed' && (
-              <div className="field-row">
-                <span>Délai (secondes)</span>
-                <input
-                  type="number"
-                  min={1}
-                  value={config.correction.delaySeconds ?? 3}
-                  onChange={(e) => updateCorrection({ delaySeconds: Number(e.target.value) })}
-                />
-              </div>
-            )}
-            <div className="field-row">
-              <span>Temps de réponse (secondes)</span>
-              <input
-                type="number"
-                min={0}
-                placeholder="Illimité"
-                value={config.timing.responseTimeSeconds ?? ''}
-                onChange={(e) => updateTiming({ responseTimeSeconds: e.target.value === '' ? null : Number(e.target.value) })}
-              />
-            </div>
-            <div className="field-row">
-              <span>Affichage correction (secondes)</span>
-              <input
-                type="number"
-                min={1}
-                value={config.timing.correctionDisplaySeconds}
-                onChange={(e) => updateTiming({ correctionDisplaySeconds: Number(e.target.value) })}
-              />
-            </div>
           </AccordionItem>
         </div>
         </>
