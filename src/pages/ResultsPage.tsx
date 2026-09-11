@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import type { Operation, SessionConfig } from '../engine/types'
 import type { SessionSummary } from './useSessionRuntime'
 import { operationLabel } from '../engine/configSummary'
-import { getConfigById, saveConfig } from '../storage/localConfigStore'
 import { usePageMeta } from '../hooks/usePageMeta'
 import './ResultsPage.css'
 
@@ -50,7 +48,6 @@ function ResultsView({
   navigate: ReturnType<typeof useNavigate>
 }) {
   const { summary, config } = state
-  const [saved, setSaved] = useState(() => Boolean(getConfigById(config.id)))
 
   const percent = summary.totalQuestions > 0 ? Math.round((summary.correctAnswers / summary.totalQuestions) * 100) : 0
   const totalTimeSeconds = summary.answers.reduce((sum, a) => sum + a.responseTimeSeconds, 0)
@@ -62,11 +59,6 @@ function ResultsView({
     bucket.total += 1
     if (record.isCorrect) bucket.correct += 1
     breakdown.set(key, bucket)
-  }
-
-  function handleSave() {
-    saveConfig({ ...config, source: 'custom' })
-    setSaved(true)
   }
 
   function handleRelaunch() {
@@ -142,12 +134,6 @@ function ResultsView({
           Relancer →
         </button>
       </div>
-
-      {!saved && (
-        <button type="button" className="btn secondary save-config-btn" onClick={handleSave}>
-          Enregistrer cette configuration
-        </button>
-      )}
     </div>
   )
 }

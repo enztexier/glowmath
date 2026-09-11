@@ -176,7 +176,7 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
         <div className="progress-label">{progressLabel}</div>
       </div>
 
-      {isAnswering && runtime.remainingResponseTime != null && (
+      {isAnswering && runtime.remainingResponseTime != null && !isPassiveReveal && (
         <div className="timer-wrap">
           <div className="timer-ring">{Math.max(0, Math.ceil(runtime.remainingResponseTime))}s</div>
         </div>

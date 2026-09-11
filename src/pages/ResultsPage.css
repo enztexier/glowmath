@@ -179,12 +179,6 @@
   color: var(--color-ink);
 }
 
-.save-config-btn {
-  flex: none;
-  width: 100%;
-  margin-top: 12px;
-}
-
 .results-missing {
   min-height: 100vh;
   display: flex;
