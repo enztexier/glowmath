@@ -18,7 +18,7 @@ export interface SessionSummary {
 
 type Phase = 'answering' | 'revealed' | 'finished'
 
-export function useSessionRuntime(config: SessionConfig, onFinish: (summary: SessionSummary) => void) {
+export function useSessionRuntime(config: SessionConfig, onFinish: (summary: SessionSummary) => void, started: boolean) {
   const isFixedCount = config.session.mode === 'fixedCount'
   const isSurvival = config.session.mode === 'survival'
   const isTotalTime = config.session.mode === 'totalTime'
@@ -67,7 +67,8 @@ export function useSessionRuntime(config: SessionConfig, onFinish: (summary: Ses
       return
     }
     if (nextIndex >= questions.length) {
-      const nextQuestion = generateQuestion(config)
+      const avoid = new Set(questions.map((q) => q.displayText))
+      const nextQuestion = generateQuestion(config, avoid)
       setQuestions((current) => [...current, nextQuestion])
     }
     setIndex(nextIndex)
@@ -134,9 +135,14 @@ export function useSessionRuntime(config: SessionConfig, onFinish: (summary: Ses
     }
   }, [index, question, config.timing.responseTimeSeconds, config.answer.inputMode])
 
+  // Reset the question clock once the session actually starts, so time spent on the intro screen isn't counted.
+  useEffect(() => {
+    if (started) questionStartRef.current = Date.now()
+  }, [started])
+
   // Per-question response countdown: auto-submit an empty (wrong) answer on timeout.
   useEffect(() => {
-    if (phase !== 'answering' || config.timing.responseTimeSeconds == null) return
+    if (!started || phase !== 'answering' || config.timing.responseTimeSeconds == null) return
     const limit = config.timing.responseTimeSeconds
     const interval = window.setInterval(() => {
       const elapsed = (Date.now() - questionStartRef.current) / 1000
@@ -152,11 +158,11 @@ export function useSessionRuntime(config: SessionConfig, onFinish: (summary: Ses
     return () => window.clearInterval(interval)
     // commitAnswer intentionally omitted: it is stable enough for this effect's lifetime (keyed on phase/index).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, index])
+  }, [phase, index, started])
 
   // Whole-session countdown for the `totalTime` mode.
   useEffect(() => {
-    if (!isTotalTime) return
+    if (!isTotalTime || !started) return
     const total = config.session.totalTimeSeconds ?? 60
     const start = Date.now()
     const interval = window.setInterval(() => {
@@ -172,7 +178,7 @@ export function useSessionRuntime(config: SessionConfig, onFinish: (summary: Ses
     }, 250)
     return () => window.clearInterval(interval)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTotalTime])
+  }, [isTotalTime, started])
 
   // Auto-advance once the correction is visible, for the immediate/delayed modes.
   useEffect(() => {

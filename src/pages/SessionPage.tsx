@@ -11,6 +11,7 @@ import { useSessionRuntime } from './useSessionRuntime'
 import type { SessionSummary } from './useSessionRuntime'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { sanitizeNumericAnswer } from '../lib/sanitizeInput'
+import SessionIntro from '../components/SessionIntro'
 import './SessionPage.css'
 
 function resolveConfig(state: unknown, searchParams: URLSearchParams): SessionConfig | undefined {
@@ -71,6 +72,7 @@ export default function SessionPage() {
 export function SessionRunner({ config }: { config: SessionConfig }) {
   const navigate = useNavigate()
   const [confirmQuit, setConfirmQuit] = useState(false)
+  const [started, setStarted] = useState(false)
 
   function handleFinish(summary: SessionSummary) {
     const breakdown: Partial<Record<Operation, { correct: number; total: number }>> = {}
@@ -95,7 +97,7 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
     navigate('/resultats', { state: { summary, config } })
   }
 
-  const runtime = useSessionRuntime(config, handleFinish)
+  const runtime = useSessionRuntime(config, handleFinish, started)
 
   function handleQuit() {
     if (runtime.answers.length > 0 && !confirmQuit) {
@@ -166,6 +168,8 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
 
   return (
     <div className="session-page">
+      {!started && <SessionIntro onStart={() => setStarted(true)} />}
+
       <div className="top-bar">
         <button type="button" className="quit-btn" aria-label="Quitter" onClick={handleQuit}>
           ✕
