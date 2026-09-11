@@ -102,7 +102,7 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
       setConfirmQuit(true)
       return
     }
-    navigate('/')
+    navigate(-1)
   }
 
   function handleSubmitKeyboard() {
@@ -340,7 +340,7 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
               <button type="button" className="btn secondary" onClick={() => setConfirmQuit(false)}>
                 Annuler
               </button>
-              <button type="button" className="btn primary" onClick={() => navigate('/')}>
+              <button type="button" className="btn primary" onClick={() => navigate(-1)}>
                 Quitter
               </button>
             </div>
