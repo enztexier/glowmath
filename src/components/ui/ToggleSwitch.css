@@ -1,0 +1,30 @@
+.toggle-pill {
+  width: 40px;
+  height: 22px;
+  background: var(--color-panel);
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.toggle-pill.on {
+  background: var(--color-correct);
+}
+
+.toggle-pill::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: var(--color-card-bg);
+  border-radius: 50%;
+}
+
+.toggle-pill.on::after {
+  left: 20px;
+}

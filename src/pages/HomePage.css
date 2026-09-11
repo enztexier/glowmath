@@ -1,0 +1,205 @@
+.card {
+  margin: 0 auto;
+  padding: 0 16px 16px;
+}
+
+/* ---------- Home grid: left column (visual + mini-cards) | right column (one tall CTA card) ---------- */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-gap);
+  min-height: calc(100vh - 127px);
+}
+
+.home-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-gap);
+}
+
+.hero-text {
+  background: var(--color-panel);
+  border-radius: var(--radius);
+  padding: 44px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-title {
+  font-weight: 800;
+  font-size: clamp(34px, 3.6vw, 46px);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.hero-title .arrow {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 14px;
+  vertical-align: middle;
+}
+
+.hero-subtitle {
+  margin: 18px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-cta);
+}
+
+.hero-desc {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-ink-soft);
+  max-width: 40ch;
+}
+
+.hero-visual {
+  position: relative;
+  flex: 1.6 1 0;
+  min-height: 460px;
+  background: var(--color-olive);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.hero-visual-tag {
+  position: absolute;
+  left: 26px;
+  bottom: 26px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #17171A;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+.eq-display {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  font-weight: 800;
+  color: var(--color-on-olive);
+}
+
+.eq-display .big {
+  font-size: 96px;
+}
+
+.eq-display .op {
+  font-size: 54px;
+  color: var(--color-on-olive-soft);
+}
+
+.eq-visual-texture {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.045) 0px, rgba(255, 255, 255, 0.045) 1px, transparent 1px, transparent 64px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.045) 0px, rgba(255, 255, 255, 0.045) 1px, transparent 1px, transparent 64px);
+}
+
+.shop-badge {
+  position: absolute;
+  top: 26px;
+  right: 26px;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #17171A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.strip-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-gap);
+  flex: 1 1 0;
+}
+
+.mini-card {
+  position: relative;
+  min-height: 200px;
+  height: 100%;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: flex-end;
+  padding: 18px;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.mini-card.tone-a {
+  background: var(--color-tone-a);
+}
+
+.mini-card.tone-b {
+  background: var(--color-olive-soft);
+}
+
+.mini-card .num {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  font-size: 56px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.mini-card-label {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.mini-card.tone-a .mini-card-label {
+  color: var(--color-ink);
+}
+
+.mini-card.tone-b .mini-card-label {
+  color: var(--color-on-olive);
+}
+
+.strip-cta {
+  text-decoration: none;
+  color: var(--color-heading);
+}
+
+@media (max-width: 760px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .hero-visual {
+    flex: none;
+    min-height: 260px;
+  }
+  .strip-cards {
+    flex: none;
+    grid-template-columns: 1fr 1fr;
+  }
+  .mini-card {
+    height: auto;
+  }
+  .home-right {
+    min-height: 260px;
+  }
+}

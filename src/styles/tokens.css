@@ -1,0 +1,95 @@
+:root {
+  --color-bg: #E4E3DD;
+  --color-card-bg: #FFFFFF;
+  --color-panel: #EFEEE7;
+  --color-ink: #17171A;
+  --color-ink-soft: #6B6B66;
+  --color-line: rgba(0, 0, 0, 0.10);
+
+  /* Text sitting directly on --color-bg (not inside a card). --color-ink
+     itself flips with the theme, so these simply alias it. */
+  --color-heading: var(--color-ink);
+  --color-heading-soft: var(--color-ink-soft);
+
+  /* Text on top of --color-olive (hero visual block) — flips independently
+     since that block turns from dark green to bright yellow in dark mode. */
+  --color-on-olive: rgba(255, 255, 255, 0.94);
+  --color-on-olive-soft: rgba(255, 255, 255, 0.55);
+
+  /* "Selected" pill state (Simple/Avancé toggle, question-count chips…).
+     A soft accent instead of a stark black pill; softer still in dark mode. */
+  --color-selected: var(--color-accent);
+  --color-selected-text: var(--color-card-bg);
+
+  /* Primary CTA ("Lancer la série"…): warm and soft, no black, no blue. */
+  --color-cta: #4B5A3E;
+  --color-cta-text: #FFFFFF;
+
+  --color-accent: #4B5A3E;
+  --color-correct: #4E8B63;
+  --color-incorrect: #C1583B;
+
+  --color-op-addition: #4A7BD9;
+  --color-op-subtraction: #8B6FD9;
+  --color-op-multiplication: #D98F4A;
+  --color-op-division: #4E8B63;
+  --color-op-fraction: #4AA3A0;
+
+  --color-olive: #4B5A3E;
+  --color-olive-soft: #7C8A69;
+  --color-tone-a: #C9CABE;
+
+  /* Dedicated, harmonious palette for the Tables page category tiles. */
+  --color-tile-1: #5B7FDB;
+  --color-tile-2: #6FA88A;
+  --color-tile-3: #D98F5E;
+  --color-tile-4: #9B84C4;
+  --color-tile-5: #4FA8A0;
+  --color-tile-6: #D9A441;
+  --color-tile-7: #C77B93;
+  --color-tile-8: #7C8FB0;
+  --color-tile-9: #A3924F;
+
+  --font-main: 'Archivo', sans-serif;
+
+  --radius: 18px;
+  --radius-sm: 10px;
+  --spacing-gap: 16px;
+}
+
+[data-theme='dark'] {
+  --color-bg: #090B10;
+  --color-card-bg: #161923;
+  --color-panel: #1D2231;
+  --color-tone-a: #242B3F;
+  --color-ink: #EDE6D6;
+  --color-ink-soft: rgba(237, 230, 214, 0.62);
+  --color-line: rgba(255, 255, 255, 0.10);
+
+  /* No green, no khaki: the hero block becomes a real yellow, the
+     second homepage tone becomes a dark blue gauged variant. */
+  --color-olive: #F2C238;
+  --color-olive-soft: #202840;
+
+  --color-on-olive: rgba(23, 23, 26, 0.9);
+  --color-on-olive-soft: rgba(237, 230, 214, 0.55);
+
+  /* Same tile family, lifted in saturation/luminance to pop against the near-black background. */
+  --color-tile-1: #6E8FEF;
+  --color-tile-2: #6FBF94;
+  --color-tile-3: #E8975F;
+  --color-tile-4: #B08FE0;
+  --color-tile-5: #4FC4BC;
+  --color-tile-6: #F2C238;
+  --color-tile-7: #E28FAA;
+  --color-tile-8: #8FA3D9;
+  --color-tile-9: #C7B65C;
+
+  --color-selected: #8C88A2;
+  --color-selected-text: #17171A;
+
+  --color-cta: #8C88A2;
+  --color-cta-text: #17171A;
+
+  --color-accent: #8C88A2;
+}

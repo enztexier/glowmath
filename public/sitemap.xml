@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://glow-math.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://glow-math.com/modes</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://glow-math.com/scolaire</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://glow-math.com/config</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://glow-math.com/savoir</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://glow-math.com/tables</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Modes ("S'entraîner") -->
+  <url><loc>https://glow-math.com/modes/tables-2-3-4-5-6-7-8-9</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/chrono</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/fractions-decimals</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/mix-college</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/addition-subtraction</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/multiplication-division</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/survival</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/mcq</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/percentage</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/order-of-operations</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/power-sqrt</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/rounding</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/negative-numbers</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/true-false</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/big-numbers</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/modes/chrono-2min</loc><priority>0.6</priority></url>
+
+  <!-- Scolaire -->
+  <url><loc>https://glow-math.com/scolaire/cp</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/scolaire/ce1</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/scolaire/ce2</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/scolaire/cm1</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/scolaire/cm2</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/scolaire/6e-5e</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/scolaire/4e-3e</loc><priority>0.6</priority></url>
+  <url><loc>https://glow-math.com/scolaire/lycee</loc><priority>0.6</priority></url>
+
+  <!-- Savoir (méthodes de calcul mental) -->
+  <url><loc>https://glow-math.com/savoir/addition/dizaine-superieure</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/addition/decomposer-dizaines-unites</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/addition/compensation-addition</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/subtraction/completer-ecart</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/subtraction/retirer-nombre-rond</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/subtraction/decomposer-nombre-a-soustraire</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/multiplication/doubler-x2-x4-x8</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/multiplication/x5-x10-puis-div2</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/multiplication/x9-x10-moins-nombre</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/multiplication/distribuer</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/division/multiple-proche</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/division/div5-x2-puis-div10</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/savoir/division/diviser-plusieurs-etapes</loc><priority>0.5</priority></url>
+
+  <!-- Tables (catégories) -->
+  <url><loc>https://glow-math.com/tables/multiplication</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/complements-10</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/division</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/carres</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/puissances-de-2</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/puissances-de-10</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/nombres-premiers</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/racines-approchees</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/fractions-decimaux-pourcentages</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/aires</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/perimetres</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/pythagore</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/angles-triangle</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/identites-remarquables</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/trigonometrie</loc><priority>0.5</priority></url>
+  <url><loc>https://glow-math.com/tables/conversions</loc><priority>0.5</priority></url>
+</urlset>

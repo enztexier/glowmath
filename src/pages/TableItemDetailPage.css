@@ -1,0 +1,114 @@
+.wrap {
+  margin: 0 auto;
+  padding: 0 16px 60px;
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-heading-soft);
+  text-decoration: none;
+  margin: 8px 4px 6px;
+}
+
+.back-link:hover {
+  color: var(--color-heading);
+}
+
+.page-title {
+  font-weight: 800;
+  font-size: clamp(28px, 4vw, 48px);
+  margin: 0;
+  color: var(--color-heading);
+}
+
+.op-detail-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 4px 20px;
+}
+
+.op-launch-series-btn {
+  background: var(--color-cta);
+  color: var(--color-cta-text);
+  border-radius: 30px;
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.op-settings-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 0 0 24px;
+}
+
+.op-settings-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-ink-soft);
+}
+
+.op-settings-field input[type='color'] {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: none;
+}
+
+.op-settings-field select {
+  padding: 8px 14px;
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  background: var(--color-panel);
+  color: var(--color-ink);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.op-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.op-detail-row {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  font-size: clamp(20px, 2.6vw, 34px);
+  font-weight: 800;
+  text-align: center;
+  transition: transform 0.12s ease, background-color 0.25s ease;
+}
+
+.op-detail-row:hover {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 700px) {
+  .op-settings-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

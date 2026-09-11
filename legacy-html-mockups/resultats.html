@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résultats — Calcul/Mental</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page-bg: #E4E3DD;
+    --ink: #17171A;
+    --ink-soft: #6B6B66;
+    --line: rgba(0,0,0,0.10);
+    --panel: #EFEEE7;
+    --accent: #3E6FD9;
+    --correct: #4E8B63;
+    --incorrect: #C1583B;
+    --font: 'Archivo', sans-serif;
+    --r: 18px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--page-bg);
+    font-family: var(--font);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    padding: 28px 16px 60px;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; }
+
+  .score-card {
+    background: var(--ink);
+    color: #fff;
+    border-radius: var(--r);
+    padding: 40px 30px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .score-card .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+    margin-bottom: 10px;
+  }
+  .score-card .score {
+    font-weight: 800;
+    font-size: 56px;
+    margin-bottom: 6px;
+  }
+  .score-card .sub { font-size: 13px; opacity: 0.7; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .stat-box {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: 20px;
+  }
+  .stat-box .num { font-size: 26px; font-weight: 800; }
+  .stat-box .label { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+
+  .breakdown {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .breakdown h3 { font-size: 14px; margin: 0 0 16px; }
+  .op-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+  .op-row:last-child { margin-bottom: 0; }
+  .op-name { width: 110px; font-weight: 600; }
+  .op-bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--panel);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .op-bar-fill { height: 100%; background: var(--correct); border-radius: 20px; }
+  .op-bar-fill.mid { background: #E8A63C; }
+  .op-score { width: 40px; text-align: right; color: var(--ink-soft); font-weight: 600; }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+  }
+  .btn {
+    flex: 1;
+    padding: 16px 0;
+    border-radius: 30px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+  }
+  .btn.primary { background: var(--ink); color: #fff; }
+  .btn.secondary { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="score-card">
+    <div class="label">Série terminée</div>
+    <div class="score">17 / 20</div>
+    <div class="sub">Temps moyen par question : 4,2 secondes</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="num" style="color: var(--correct);">85%</div>
+      <div class="label">de réussite</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">1min 24s</div>
+      <div class="label">temps total</div>
+    </div>
+  </div>
+
+  <div class="breakdown">
+    <h3>Détail par opération</h3>
+    <div class="op-row">
+      <div class="op-name">Addition</div>
+      <div class="op-bar-track"><div class="op-bar-fill" style="width: 95%;"></div></div>
+      <div class="op-score">9/10</div>
+    </div>
+    <div class="op-row">
+      <div class="op-name">Soustraction</div>
+      <div class="op-bar-track"><div class="op-bar-fill mid" style="width: 80%;"></div></div>
+      <div class="op-score">8/10</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn secondary">Retour à l'accueil</button>
+    <button class="btn primary">Relancer →</button>
+  </div>
+
+</div>
+</body>
+</html>

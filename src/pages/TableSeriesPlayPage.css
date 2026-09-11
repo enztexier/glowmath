@@ -1,0 +1,207 @@
+.series-play {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+.series-play-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.series-play-quit {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: var(--color-ink);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.series-play-progress {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-ink-soft);
+}
+
+.series-play-timer {
+  min-width: 38px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  padding: 8px 14px;
+}
+
+.series-play-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.series-play-equation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  font-weight: 800;
+  font-size: clamp(72px, 16vw, 200px);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.series-play-slot {
+  width: 2.2em;
+  display: inline-block;
+  text-align: center;
+}
+
+.series-play-slot.neutral {
+  color: var(--color-ink-soft);
+}
+
+.series-play-slot.correct {
+  color: var(--color-correct);
+}
+
+.series-play-slot.incorrect {
+  color: var(--color-incorrect);
+}
+
+.series-play-inline-input {
+  background: none;
+  border: none;
+  border-bottom: 0.06em solid var(--color-accent);
+  padding: 0;
+  font-size: 1em;
+  font-weight: 800;
+  width: 2.2em;
+  text-align: center;
+  color: var(--color-accent);
+  font-family: inherit;
+  line-height: 1;
+}
+
+.series-play-inline-input:focus-visible {
+  outline: none;
+}
+
+.series-play-footer {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.series-play-btn {
+  padding: 14px 28px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.series-play-btn.primary {
+  background: var(--color-cta);
+  color: var(--color-cta-text);
+}
+
+.series-play-btn.secondary {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  color: var(--color-ink);
+}
+
+/* On-screen keypad — mobile only; desktop types on a physical keyboard */
+.series-keypad {
+  display: none;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 340px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.series-key {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 18px 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--color-ink);
+  font-family: inherit;
+}
+
+.series-key.action {
+  background: var(--color-panel);
+  font-size: 16px;
+}
+
+.series-key.validate {
+  background: var(--color-ink);
+  color: var(--color-card-bg);
+}
+
+@media (max-width: 760px) {
+  .series-keypad {
+    display: grid;
+  }
+
+  .series-desktop-only {
+    display: none;
+  }
+}
+
+.series-play-done {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.series-play-done h1 {
+  font-size: clamp(28px, 5vw, 44px);
+  margin: 0;
+}
+
+.series-play-score {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-ink-soft);
+  margin: 0;
+}
+
+.series-play-done-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}

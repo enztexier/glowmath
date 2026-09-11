@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calcul — entraîne-toi comme tu veux</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page-bg: #E4E3DD;
+    --card-bg: #FFFFFF;
+    --ink: #17171A;
+    --ink-soft: #6B6B66;
+    --line: rgba(0,0,0,0.10);
+    --panel: #EFEEE7;
+    --olive: #4B5A3E;
+    --olive-soft: #7C8A69;
+    --accent: #3E6FD9;
+    --correct: #4E8B63;
+    --incorrect: #C1583B;
+    --font: 'Archivo', sans-serif;
+    --r: 18px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--page-bg);
+    font-family: var(--font);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    padding: 28px 16px 60px;
+  }
+
+  .card {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* ---------- Nav ---------- */
+  nav.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    margin-bottom: 16px;
+  }
+  .logo {
+    font-weight: 800;
+    font-size: 13px;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .nav-links a { color: inherit; text-decoration: none; }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .search-pill {
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .icon-btn {
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--ink);
+  }
+
+  /* ---------- Hero grid ---------- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    min-height: 460px;
+    margin-bottom: 16px;
+  }
+  .hero-text {
+    background: var(--panel);
+    border-radius: var(--r);
+    padding: 44px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .hero-title {
+    font-weight: 800;
+    font-size: clamp(34px, 3.6vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .hero-title .arrow {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 14px;
+    vertical-align: middle;
+  }
+  .hero-copy {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 320px;
+    margin-top: 32px;
+  }
+
+  .hero-visual {
+    position: relative;
+    background: var(--olive);
+    border-radius: var(--r);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .eq-display {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.94);
+  }
+  .eq-display .big { font-size: 96px; }
+  .eq-display .op { font-size: 54px; color: rgba(255,255,255,0.55); }
+  .eq-visual-texture {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 64px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 64px);
+  }
+  .shop-badge {
+    position: absolute;
+    top: 26px;
+    right: 26px;
+    width: 92px; height: 92px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+
+  /* ---------- Bottom strip: 2 cards + visual continuation ---------- */
+  .strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .strip-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .mini-card {
+    position: relative;
+    min-height: 200px;
+    border-radius: var(--r);
+    display: flex;
+    align-items: flex-end;
+    padding: 18px;
+    overflow: hidden;
+  }
+  .mini-card.tone-a { background: #C9CABE; }
+  .mini-card.tone-b { background: var(--olive-soft); }
+  .mini-card .num {
+    position: absolute;
+    top: 16px; left: 18px;
+    font-size: 56px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.55);
+  }
+  .mini-card .tag {
+    background: var(--ink);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.02em;
+  }
+
+  .strip-actions {
+    display: flex;
+    gap: 16px;
+  }
+  .action {
+    flex: 1;
+    border-radius: var(--r);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .action.dark {
+    background: var(--ink);
+    color: #fff;
+  }
+  .action.light {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .action-icon {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .action.dark .action-icon { background: rgba(255,255,255,0.15); }
+  .action.light .action-icon { border: 1px solid var(--line); }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-visual { min-height: 260px; }
+    .strip { grid-template-columns: 1fr; }
+    .strip-cards { grid-template-columns: 1fr 1fr; }
+    .nav-links, .search-pill span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <nav class="top">
+    <div class="logo">CALCUL<br>MENTAL</div>
+    <div class="nav-links">
+      <a href="#">Modes scolaires</a>
+      <a href="#">Thématiques</a>
+      <a href="#">Personnalisé</a>
+      <a href="#">Mes configs</a>
+    </div>
+    <div class="nav-right">
+      <div class="search-pill">🔍 <span>Rechercher</span></div>
+      <div class="icon-btn">🎨</div>
+      <div class="icon-btn">👤</div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        POUR TOUS<br>
+        LES NIVEAUX<span class="arrow">
+          <svg width="42" height="18" viewBox="0 0 42 18" fill="none"><path d="M0 9H40M40 9L32 1M40 9L32 17" stroke="currentColor" stroke-width="1.8"/></svg>
+        </span>
+      </h1>
+      <p class="hero-copy">
+        Du CP au lycée, à ton rythme. Choisis une opération, une difficulté,
+        un format de session — ou pars d'un mode déjà prêt.
+      </p>
+    </div>
+    <div class="hero-visual">
+      <div class="eq-visual-texture"></div>
+      <div class="eq-display">
+        <span class="big">37</span>
+        <span class="op">+</span>
+        <span class="big">15</span>
+      </div>
+      <div class="shop-badge">COMMENCER<br>UNE SÉRIE</div>
+    </div>
+  </section>
+
+  <section class="strip">
+    <div class="strip-cards">
+      <div class="mini-card tone-a">
+        <div class="num">×</div>
+        <span class="tag">#TABLES</span>
+      </div>
+      <div class="mini-card tone-b">
+        <div class="num">½</div>
+        <span class="tag">#FRACTIONS</span>
+      </div>
+    </div>
+    <div class="strip-actions">
+      <div class="action dark">
+        MODES RAPIDES
+        <span class="action-icon">↓</span>
+      </div>
+      <div class="action light">
+        PERSONNALISER
+        <span class="action-icon">✎</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

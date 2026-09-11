@@ -1,0 +1,315 @@
+.wrap {
+  margin: 0 auto;
+  padding: 0 16px 24px;
+}
+
+.config-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* Simple/Avancé toggle */
+.mode-toggle {
+  display: flex;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 30px;
+  padding: 4px;
+  margin-bottom: 12px;
+}
+
+.mode-toggle .opt {
+  flex: 1;
+  text-align: center;
+  padding: 11px 0;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mode-toggle .opt.active {
+  background: var(--color-selected);
+  color: var(--color-selected-text);
+}
+
+.mode-toggle .opt:not(.active) {
+  color: var(--color-ink-soft);
+}
+
+/* Simple form */
+.panel {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 4px 20px;
+  margin-bottom: 16px;
+}
+
+.config-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.config-row:last-child {
+  border-bottom: none;
+}
+
+.config-row.column {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.config-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.config-row-hint {
+  font-size: 13px;
+  color: var(--color-ink-soft);
+  margin-top: 2px;
+}
+
+.config-row-locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.config-slider {
+  width: 100%;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.config-row-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-soft);
+  margin-bottom: 12px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 9px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--color-line);
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-ink);
+  font-family: inherit;
+}
+
+.chip.selected {
+  background: var(--color-accent);
+  color: var(--color-card-bg);
+  border-color: var(--color-accent);
+}
+
+.difficulty-row {
+  display: flex;
+  gap: 8px;
+}
+
+.diff-opt {
+  flex: 1;
+  text-align: center;
+  padding: 14px 0;
+  border-radius: var(--radius);
+  background: var(--color-panel);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.diff-opt.selected {
+  border-color: var(--color-accent);
+  background: var(--color-card-bg);
+}
+
+.qcount-row {
+  display: flex;
+  gap: 8px;
+}
+
+.qcount-opt {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: var(--color-panel);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.qcount-opt.selected {
+  background: var(--color-selected);
+  color: var(--color-selected-text);
+}
+
+/* Advanced accordion */
+.acc-item {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.acc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 18px 22px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  background: none;
+  border: none;
+  color: var(--color-ink);
+  font-family: inherit;
+  text-align: left;
+}
+
+.acc-head .status {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-ink-soft);
+}
+
+.acc-body {
+  padding: 0 22px 20px;
+  font-size: 13px;
+  color: var(--color-ink-soft);
+  line-height: 1.7;
+  border-top: 1px solid var(--color-line);
+  padding-top: 16px;
+}
+
+.acc-body .subrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.acc-body .subfields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 12px;
+  background: var(--color-panel);
+  border-radius: var(--radius-sm);
+}
+
+.acc-body .subfields label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--color-ink-soft);
+}
+
+.acc-body .subfields label.checkbox-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.acc-body .subfields input[type='number'],
+.acc-body .subfields input[type='text'] {
+  width: 100px;
+}
+
+.acc-body .field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.acc-body input,
+.acc-body select {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--color-ink);
+  background: var(--color-card-bg);
+}
+
+/* Bottom actions */
+.actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.save-name-input {
+  flex-basis: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--color-ink);
+  background: var(--color-card-bg);
+}
+
+.btn {
+  flex: 1;
+  padding: 15px 0;
+  border-radius: 30px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.btn.primary {
+  background: var(--color-cta);
+  color: var(--color-cta-text);
+}
+
+.btn.secondary {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  color: var(--color-ink);
+}
+
+.save-confirmation {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-correct);
+  text-align: center;
+}

@@ -1,0 +1,103 @@
+.wrap {
+  margin: 0 auto;
+  padding: 0 16px 60px;
+}
+
+.page-title {
+  font-weight: 800;
+  font-size: clamp(28px, 3vw, 38px);
+  margin: 8px 4px 8px;
+  color: var(--color-heading);
+}
+
+.page-intro {
+  font-size: 14px;
+  color: var(--color-heading-soft);
+  margin: 0 4px 32px;
+  max-width: 520px;
+}
+
+.savoir-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.savoir-section-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 4px 16px;
+}
+
+.op-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-card-bg);
+  font-weight: 800;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.savoir-section-head h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-heading);
+}
+
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.method-card {
+  display: block;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.method-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-accent);
+}
+
+.method-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--color-heading);
+}
+
+.method-tip {
+  font-size: 13px;
+  color: var(--color-ink-soft);
+  line-height: 1.55;
+  margin: 0 0 12px;
+}
+
+.method-example {
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--color-panel);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin: 0 0 12px;
+  color: var(--color-ink);
+}
+
+.method-more {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-accent);
+}

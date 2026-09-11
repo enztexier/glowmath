@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configurer — Calcul/Mental</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page-bg: #E4E3DD;
+    --card-bg: #FFFFFF;
+    --ink: #17171A;
+    --ink-soft: #6B6B66;
+    --line: rgba(0,0,0,0.10);
+    --panel: #EFEEE7;
+    --accent: #3E6FD9;
+    --correct: #4E8B63;
+    --incorrect: #C1583B;
+    --font: 'Archivo', sans-serif;
+    --r: 18px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--page-bg);
+    font-family: var(--font);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    padding: 28px 16px 80px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  nav.top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    margin-bottom: 16px;
+  }
+  .logo { font-weight: 800; font-size: 13px; line-height: 1.25; }
+  .icon-btn { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+
+  /* Recap bar */
+  .recap {
+    position: sticky;
+    top: 16px;
+    z-index: 5;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .recap b { font-weight: 700; }
+  .recap .sep { opacity: 0.4; }
+
+  /* Simple/Avancé toggle */
+  .mode-toggle {
+    display: flex;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    padding: 4px;
+    margin-bottom: 24px;
+  }
+  .mode-toggle .opt {
+    flex: 1;
+    text-align: center;
+    padding: 11px 0;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .mode-toggle .opt.active { background: var(--ink); color: #fff; }
+  .mode-toggle .opt:not(.active) { color: var(--ink-soft); }
+
+  /* Simple form */
+  .panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: 26px;
+    margin-bottom: 16px;
+  }
+  .field-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+  .chip {
+    padding: 9px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .chip.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .difficulty-row { display: flex; gap: 8px; margin-bottom: 26px; }
+  .diff-opt {
+    flex: 1;
+    text-align: center;
+    padding: 14px 0;
+    border-radius: var(--r);
+    background: var(--panel);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  .diff-opt.selected { border-color: var(--accent); background: #fff; }
+
+  .qcount-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .qcount-opt {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background: var(--panel);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .qcount-opt.selected { background: var(--ink); color: #fff; }
+
+  /* Advanced accordion */
+  .accordion { display: none; }
+  .accordion.visible { display: block; }
+  .acc-item {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .acc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .acc-head .status { font-size: 12px; font-weight: 500; color: var(--ink-soft); }
+  .acc-body {
+    padding: 0 22px 20px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .acc-body .subrow { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .toggle-pill {
+    width: 40px; height: 22px;
+    background: var(--panel);
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+  }
+  .toggle-pill.on { background: var(--correct); }
+  .toggle-pill::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 18px; height: 18px;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .toggle-pill.on::after { left: 20px; }
+
+  /* Bottom actions */
+  .actions-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .btn {
+    flex: 1;
+    padding: 16px 0;
+    border-radius: 30px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+  }
+  .btn.primary { background: var(--ink); color: #fff; }
+  .btn.secondary { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <div class="logo">CALCUL<br>MENTAL</div>
+    <div class="icon-btn">✕</div>
+  </nav>
+
+  <div class="recap">
+    <span><b>Addition, Soustraction</b></span><span class="sep">·</span>
+    <span>Entiers 1–100</span><span class="sep">·</span>
+    <span>20 questions</span>
+  </div>
+
+  <div class="mode-toggle">
+    <div class="opt active">Simple</div>
+    <div class="opt">Avancé</div>
+  </div>
+
+  <!-- SIMPLE MODE -->
+  <div class="panel">
+    <div class="field-label">Opérations</div>
+    <div class="chips">
+      <div class="chip selected">Addition</div>
+      <div class="chip selected">Soustraction</div>
+      <div class="chip">Multiplication</div>
+      <div class="chip">Division</div>
+    </div>
+
+    <div class="field-label">Difficulté</div>
+    <div class="difficulty-row">
+      <div class="diff-opt">Facile</div>
+      <div class="diff-opt selected">Moyen</div>
+      <div class="diff-opt">Difficile</div>
+    </div>
+
+    <div class="field-label">Nombre de questions</div>
+    <div class="qcount-row">
+      <div class="qcount-opt">10</div>
+      <div class="qcount-opt selected">20</div>
+      <div class="qcount-opt">30</div>
+      <div class="qcount-opt">50</div>
+    </div>
+  </div>
+
+  <!-- ADVANCED MODE (illustration, masqué par défaut) -->
+  <div class="accordion visible" style="margin-top: 24px;">
+    <div class="field-label" style="margin: 0 4px 12px;">Aperçu du mode avancé</div>
+    <div class="acc-item">
+      <div class="acc-head">Types de nombres <span class="status">Entiers, Décimaux ›</span></div>
+      <div class="acc-body">
+        <div class="subrow">Entiers (1–100) <div class="toggle-pill on"></div></div>
+        <div class="subrow">Décimaux (2 chiffres) <div class="toggle-pill on"></div></div>
+        <div class="subrow">Fractions <div class="toggle-pill"></div></div>
+        <div class="subrow">Nombres négatifs <div class="toggle-pill"></div></div>
+      </div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-head">Format de session <span class="status">20 questions ›</span></div>
+      <div class="acc-body">
+        <div class="subrow">Mode <span>Nombre fixe de questions</span></div>
+        <div class="subrow">Temps par question <span>Illimité</span></div>
+      </div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-head">Réponse & correction <span class="status">Clavier · Immédiate ›</span></div>
+      <div class="acc-body">
+        <div class="subrow">Saisie <span>Clavier</span></div>
+        <div class="subrow">Correction <span>Immédiate</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <button class="btn secondary">Enregistrer</button>
+    <button class="btn primary">Lancer la série →</button>
+  </div>
+
+</div>
+</body>
+</html>

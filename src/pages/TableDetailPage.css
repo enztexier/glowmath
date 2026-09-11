@@ -1,0 +1,129 @@
+.wrap {
+  margin: 0 auto;
+  padding: 0 16px 60px;
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-heading-soft);
+  text-decoration: none;
+  margin: 8px 4px 6px;
+}
+
+.back-link:hover {
+  color: var(--color-heading);
+}
+
+.page-title {
+  font-weight: 800;
+  font-size: clamp(24px, 2.6vw, 34px);
+  margin: 0 4px 24px;
+  color: var(--color-heading);
+}
+
+.subsection-title {
+  font-weight: 700;
+  font-size: 18px;
+  margin: 32px 4px 14px;
+  color: var(--color-heading);
+}
+
+.content-note {
+  font-size: 14px;
+  color: var(--color-heading-soft);
+  margin: 0 4px 16px;
+}
+
+/* Item summary cards */
+.op-table-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.op-summary-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--color-ink);
+  transition: transform 0.12s ease, background-color 0.25s ease;
+}
+
+.op-summary-card:hover {
+  transform: translateY(-3px);
+}
+
+.op-summary-number {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.op-summary-label {
+  font-size: 13px;
+  color: var(--color-ink-soft);
+}
+
+/* Generic grid table (multiplication grid) */
+.grid-scroll {
+  overflow-x: auto;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 8px;
+}
+
+.grid-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 620px;
+}
+
+.grid-table th,
+.grid-table td {
+  text-align: center;
+  padding: 10px 8px;
+  font-size: 13px;
+}
+
+.grid-table thead th,
+.grid-table tbody th {
+  color: var(--color-ink-soft);
+  font-weight: 700;
+}
+
+.grid-table tbody td,
+.grid-table tbody th {
+  border-top: 1px solid var(--color-line);
+}
+
+/* Heatmap variant: bigger, color-coded by value for quick pattern recognition */
+.grid-table.heatmap {
+  border-collapse: separate;
+  border-spacing: 4px;
+}
+
+.grid-table.heatmap thead th,
+.grid-table.heatmap tbody th {
+  font-size: 15px;
+  border-top: none;
+}
+
+.grid-table.heatmap tbody td {
+  font-size: 18px;
+  font-weight: 800;
+  padding: 16px 8px;
+  border-top: none;
+  border-radius: var(--radius-sm);
+}
+
+.grid-table.heatmap .square-cell {
+  box-shadow: inset 0 0 0 3px var(--color-heading);
+}
