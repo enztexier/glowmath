@@ -217,9 +217,20 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
           </div>
         ) : (
           <div className="question">
-            {config.answer.inputMode === 'trueFalse' && runtime.trueFalseStatement
-              ? runtime.trueFalseStatement.displayText
-              : runtime.question.displayText}
+            {config.answer.inputMode === 'trueFalse' && runtime.trueFalseStatement ? (
+              runtime.trueFalseStatement.displayText
+            ) : showCorrection ? (
+              <>
+                {runtime.question.displayText.replace('?', '')}
+                <span
+                  className={`answer-inline-slot ${isPassiveReveal ? 'neutral' : runtime.lastAnswer?.isCorrect ? 'correct' : 'incorrect'}`}
+                >
+                  {runtime.question.correctAnswerDisplay}
+                </span>
+              </>
+            ) : (
+              runtime.question.displayText
+            )}
           </div>
         )}
 
@@ -232,16 +243,14 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
           </div>
         )}
 
-        {showCorrection && config.answer.inputMode !== 'keyboard' && isPassiveReveal && (
-          <div className="correction-banner neutral" aria-live="polite">
-            Réponse : {runtime.question.correctAnswerDisplay}
-          </div>
-        )}
-
         {showCorrection && config.answer.inputMode !== 'keyboard' && !isPassiveReveal && (
           <div className={`correction-banner ${runtime.lastAnswer?.isCorrect ? 'correct' : 'incorrect'}`} aria-live="polite">
             <span aria-hidden="true">{runtime.lastAnswer?.isCorrect ? '✓' : '✗'}</span>
-            {runtime.lastAnswer?.isCorrect ? 'Bonne réponse !' : `Réponse : ${runtime.question.correctAnswerDisplay}`}
+            {runtime.lastAnswer?.isCorrect
+              ? 'Bonne réponse !'
+              : config.answer.inputMode === 'trueFalse'
+                ? `Réponse : ${runtime.question.correctAnswerDisplay}`
+                : 'Mauvaise réponse'}
           </div>
         )}
 

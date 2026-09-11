@@ -309,6 +309,102 @@ export default function ConfigPage() {
             </div>
           </div>
         ) : (
+        <>
+        <div className="panel">
+          <div className="field-label">Options rapides</div>
+
+          <div className="config-row">
+            <div className="config-row-text">
+              <div className="config-row-title">Aléatoire</div>
+              <div className="config-row-hint">Les questions sont toujours mélangées</div>
+            </div>
+            <span className="config-row-locked">
+              <ToggleSwitch checked onChange={() => {}} label="Aléatoire" />
+            </span>
+          </div>
+
+          <div className="config-row">
+            <div className="config-row-text">
+              <div className="config-row-title">À l'infini</div>
+              <div className="config-row-hint">La série continue sans limite de questions</div>
+            </div>
+            <ToggleSwitch
+              checked={config.session.mode === 'training'}
+              onChange={(v) =>
+                updateSession(v ? { mode: 'training' } : { mode: 'fixedCount', questionCount: config.session.questionCount ?? 20 })
+              }
+              label="À l'infini"
+            />
+          </div>
+
+          <div className="config-row">
+            <div className="config-row-text">
+              <div className="config-row-title">Remplir à la main</div>
+              <div className="config-row-hint">Tape la réponse au clavier</div>
+            </div>
+            <ToggleSwitch
+              checked={config.answer.inputMode === 'keyboard'}
+              onChange={(v) => {
+                if (v) {
+                  updateAnswer({ inputMode: 'keyboard' })
+                  updateTiming({ responseTimeSeconds: null })
+                  updateCorrection({ mode: 'immediate' })
+                } else {
+                  updateAnswer({ inputMode: 'knewOrNot' })
+                  updateTiming({ responseTimeSeconds: revealSeconds })
+                  updateCorrection({ mode: 'immediate' })
+                }
+              }}
+              label="Remplir à la main"
+            />
+          </div>
+
+          <div className="config-row column">
+            <div className="config-row-header">
+              <div className="config-row-text">
+                <div className="config-row-title">Voir la réponse après</div>
+                <div className="config-row-hint">La réponse s'affiche toute seule, puis la question suivante arrive</div>
+              </div>
+              <ToggleSwitch
+                checked={config.answer.inputMode === 'knewOrNot'}
+                onChange={(v) => {
+                  if (v) {
+                    updateAnswer({ inputMode: 'knewOrNot' })
+                    updateTiming({ responseTimeSeconds: revealSeconds })
+                    updateCorrection({ mode: 'immediate' })
+                  } else {
+                    updateAnswer({ inputMode: 'keyboard' })
+                    updateTiming({ responseTimeSeconds: null })
+                    updateCorrection({ mode: 'immediate' })
+                  }
+                }}
+                label="Voir la réponse après"
+              />
+            </div>
+            {config.answer.inputMode === 'knewOrNot' && (
+              <>
+                <div className="config-row-hint">
+                  {revealSeconds} seconde{revealSeconds > 1 ? 's' : ''}
+                </div>
+                <input
+                  type="range"
+                  min={1}
+                  max={60}
+                  value={revealSeconds}
+                  onChange={(e) => updateTiming({ responseTimeSeconds: Number(e.target.value) })}
+                  className="config-slider"
+                  aria-label="Voir la réponse après combien de secondes"
+                />
+              </>
+            )}
+          </div>
+          {(config.answer.inputMode === 'mcq' || config.answer.inputMode === 'trueFalse') && (
+            <p className="config-row-hint">
+              Saisie actuelle : {config.answer.inputMode === 'mcq' ? 'QCM' : 'Vrai / Faux'} (réglable dans « Réponse » ci-dessous).
+            </p>
+          )}
+        </div>
+
         <div className="accordion visible">
           <AccordionItem title="Opérations" status={`${config.operations.length} sélectionnée(s)`}>
             <OperationChips operations={ALL_OPERATIONS} selected={config.operations} onToggle={toggleOperation} />
@@ -592,6 +688,7 @@ export default function ConfigPage() {
             </div>
           </AccordionItem>
         </div>
+        </>
       )}
 
       <div className="actions-row">
