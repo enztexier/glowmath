@@ -671,13 +671,21 @@ function generateId(): string {
   return `q-${Date.now()}-${Math.random().toString(36).slice(2)}`
 }
 
-export function generateQuestion(config: SessionConfig): GeneratedQuestion {
+const MAX_DEDUPE_ATTEMPTS = 30
+
+export function generateQuestion(config: SessionConfig, avoidDisplayTexts?: ReadonlySet<string>): GeneratedQuestion {
   if (config.operations.length === 0) {
     throw new Error('SessionConfig must include at least one operation')
   }
 
-  const operation = pickRandom(config.operations)
-  const raw = OPERATION_GENERATORS[operation](config)
+  let operation: Operation
+  let raw: RawQuestion
+  let attempts = 0
+  do {
+    operation = pickRandom(config.operations)
+    raw = OPERATION_GENERATORS[operation](config)
+    attempts++
+  } while (avoidDisplayTexts?.has(raw.displayText) && attempts < MAX_DEDUPE_ATTEMPTS)
 
   const question: GeneratedQuestion = {
     id: generateId(),
@@ -700,7 +708,14 @@ export function generateQuestion(config: SessionConfig): GeneratedQuestion {
 }
 
 export function generateQuestions(config: SessionConfig, count: number): GeneratedQuestion[] {
-  return Array.from({ length: count }, () => generateQuestion(config))
+  const seen = new Set<string>()
+  const questions: GeneratedQuestion[] = []
+  for (let i = 0; i < count; i++) {
+    const question = generateQuestion(config, seen)
+    seen.add(question.displayText)
+    questions.push(question)
+  }
+  return questions
 }
 
 function fractionDenominatorPool(correct: Fraction, config: SessionConfig): number[] {
