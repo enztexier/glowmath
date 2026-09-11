@@ -48,6 +48,7 @@ function ResultsView({
   navigate: ReturnType<typeof useNavigate>
 }) {
   const { summary, config } = state
+  const isPassiveReview = config.answer.inputMode === 'knewOrNot' && config.timing.responseTimeSeconds != null
 
   const percent = summary.totalQuestions > 0 ? Math.round((summary.correctAnswers / summary.totalQuestions) * 100) : 0
   const totalTimeSeconds = summary.answers.reduce((sum, a) => sum + a.responseTimeSeconds, 0)
@@ -69,26 +70,37 @@ function ResultsView({
     <div className="results-wrap">
       <div className="score-card">
         <div className="label">Série terminée</div>
-        <div className="score">
-          {summary.correctAnswers} / {summary.totalQuestions}
-        </div>
-        <div className="sub">Temps moyen par question : {formatAverage(summary.averageTimeSeconds)}</div>
+        {isPassiveReview ? (
+          <>
+            <div className="score">{summary.totalQuestions}</div>
+            <div className="sub">questions revues</div>
+          </>
+        ) : (
+          <>
+            <div className="score">
+              {summary.correctAnswers} / {summary.totalQuestions}
+            </div>
+            <div className="sub">Temps moyen par question : {formatAverage(summary.averageTimeSeconds)}</div>
+          </>
+        )}
       </div>
 
-      <div className="stats-row">
-        <div className="stat-box">
-          <div className="num" style={{ color: 'var(--color-correct)' }}>
-            {percent}%
+      <div className={`stats-row${isPassiveReview ? ' single' : ''}`}>
+        {!isPassiveReview && (
+          <div className="stat-box">
+            <div className="num" style={{ color: 'var(--color-correct)' }}>
+              {percent}%
+            </div>
+            <div className="label">de réussite</div>
           </div>
-          <div className="label">de réussite</div>
-        </div>
+        )}
         <div className="stat-box">
           <div className="num">{formatDuration(totalTimeSeconds)}</div>
           <div className="label">temps total</div>
         </div>
       </div>
 
-      {breakdown.size > 1 && (
+      {!isPassiveReview && breakdown.size > 1 && (
         <div className="breakdown">
           <h3>Détail par opération</h3>
           {[...breakdown.entries()].map(([operation, stats]) => {

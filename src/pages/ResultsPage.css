@@ -43,6 +43,10 @@
   margin-bottom: 16px;
 }
 
+.stats-row.single {
+  grid-template-columns: 1fr;
+}
+
 .stat-box {
   background: var(--color-card-bg);
   border: 1px solid var(--color-line);
