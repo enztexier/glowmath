@@ -64,6 +64,9 @@ export interface SessionConfig {
     responseTimeSeconds: number | null
     correctionDisplaySeconds: number
   }
+
+  /** Shows a live strategy tip alongside the question, before the user answers. */
+  showHints?: boolean
 }
 
 export interface GeneratedQuestion {

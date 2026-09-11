@@ -175,7 +175,7 @@
 }
 
 .mini-card.tone-b .mini-card-label {
-  color: var(--color-on-olive);
+  color: rgba(255, 255, 255, 0.94);
 }
 
 .strip-cta {

@@ -53,12 +53,17 @@
 
 .theme-card .tag {
   align-self: flex-start;
-  background: var(--color-ink);
-  color: var(--color-card-bg);
-  font-size: 11px;
+  background: var(--color-cta);
+  color: var(--color-cta-text);
+  font-size: 20px;
   font-weight: 700;
-  padding: 5px 11px;
-  border-radius: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .theme-card h3 {

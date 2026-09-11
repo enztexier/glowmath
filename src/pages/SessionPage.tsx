@@ -6,6 +6,7 @@ import { findPresetById } from '../engine/presets'
 import { getConfigById } from '../storage/localConfigStore'
 import { addResult } from '../storage/localStatsStore'
 import { validateAnswer } from '../engine/validators'
+import { getMentalMathHint } from '../engine/mentalMathHints'
 import { useSessionRuntime } from './useSessionRuntime'
 import type { SessionSummary } from './useSessionRuntime'
 import { usePageMeta } from '../hooks/usePageMeta'
@@ -146,6 +147,8 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
   const showOnDemandPrompt = runtime.phase === 'revealed' && !runtime.revealVisible && config.correction.mode === 'onDemand'
   const showOnDemandNext = showCorrection && config.correction.mode === 'onDemand'
   const isFractionAnswer = isFraction(runtime.question.correctAnswer)
+  const isPassiveReveal = config.answer.inputMode === 'knewOrNot' && config.timing.responseTimeSeconds != null
+  const hint = config.showHints ? getMentalMathHint(runtime.question) : null
 
   const progressLabel =
     runtime.totalQuestions != null
@@ -220,7 +223,22 @@ export function SessionRunner({ config }: { config: SessionConfig }) {
           </div>
         )}
 
-        {showCorrection && config.answer.inputMode !== 'keyboard' && (
+        {isAnswering && hint && (
+          <div className="question-hint" aria-live="polite">
+            <span className="question-hint-icon" aria-hidden="true">
+              💡
+            </span>
+            {hint}
+          </div>
+        )}
+
+        {showCorrection && config.answer.inputMode !== 'keyboard' && isPassiveReveal && (
+          <div className="correction-banner neutral" aria-live="polite">
+            Réponse : {runtime.question.correctAnswerDisplay}
+          </div>
+        )}
+
+        {showCorrection && config.answer.inputMode !== 'keyboard' && !isPassiveReveal && (
           <div className={`correction-banner ${runtime.lastAnswer?.isCorrect ? 'correct' : 'incorrect'}`} aria-live="polite">
             <span aria-hidden="true">{runtime.lastAnswer?.isCorrect ? '✓' : '✗'}</span>
             {runtime.lastAnswer?.isCorrect ? 'Bonne réponse !' : `Réponse : ${runtime.question.correctAnswerDisplay}`}

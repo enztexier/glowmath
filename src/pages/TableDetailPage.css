@@ -19,39 +19,40 @@
 .page-title {
   font-weight: 800;
   font-size: clamp(24px, 2.6vw, 34px);
-  margin: 0 4px 24px;
+  margin: 0 4px 64px;
   color: var(--color-heading);
 }
 
 .subsection-title {
   font-weight: 700;
   font-size: 18px;
-  margin: 32px 4px 14px;
+  margin: 48px 4px 14px;
   color: var(--color-heading);
 }
 
 .content-note {
   font-size: 14px;
   color: var(--color-heading-soft);
-  margin: 0 4px 16px;
+  margin: 0 4px 20px;
 }
 
 /* Item summary cards */
 .op-table-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 12px;
+  row-gap: 24px;
+  column-gap: 16px;
 }
 
 .op-summary-card {
   background: var(--color-card-bg);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  padding: 20px 18px;
+  padding: 26px 22px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 6px;
+  gap: 10px;
   text-decoration: none;
   color: var(--color-ink);
   transition: transform 0.12s ease, background-color 0.25s ease;
@@ -77,53 +78,38 @@
   background: var(--color-card-bg);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  padding: 8px;
+  padding: 20px;
 }
 
-.grid-table {
-  border-collapse: collapse;
-  width: 100%;
-  min-width: 620px;
+/* Heatmap grid: CSS Grid (not a <table>) so aspect-ratio reliably makes each
+   value cell a true square that scales with the page width — table-cell
+   boxes ignore aspect-ratio in most browsers, which a <table> layout can't. */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: minmax(28px, 0.6fr) repeat(10, 1fr);
+  gap: 4px;
+  min-width: 480px;
 }
 
-.grid-table th,
-.grid-table td {
-  text-align: center;
-  padding: 10px 8px;
+.heatmap-corner {
+  min-width: 0;
+}
+
+.heatmap-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 13px;
-}
-
-.grid-table thead th,
-.grid-table tbody th {
-  color: var(--color-ink-soft);
   font-weight: 700;
+  color: var(--color-ink-soft);
 }
 
-.grid-table tbody td,
-.grid-table tbody th {
-  border-top: 1px solid var(--color-line);
-}
-
-/* Heatmap variant: bigger, color-coded by value for quick pattern recognition */
-.grid-table.heatmap {
-  border-collapse: separate;
-  border-spacing: 4px;
-}
-
-.grid-table.heatmap thead th,
-.grid-table.heatmap tbody th {
-  font-size: 15px;
-  border-top: none;
-}
-
-.grid-table.heatmap tbody td {
-  font-size: 18px;
+.heatmap-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(18px, 3.2vw, 38px);
   font-weight: 800;
-  padding: 16px 8px;
-  border-top: none;
   border-radius: var(--radius-sm);
-}
-
-.grid-table.heatmap .square-cell {
-  box-shadow: inset 0 0 0 3px var(--color-heading);
 }

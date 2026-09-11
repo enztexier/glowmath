@@ -26,6 +26,7 @@
   </url>
 
   <!-- Modes ("S'entraîner") -->
+  <url><loc>https://glow-math.com/modes/premiers-pas</loc><priority>0.6</priority></url>
   <url><loc>https://glow-math.com/modes/tables-2-3-4-5-6-7-8-9</loc><priority>0.6</priority></url>
   <url><loc>https://glow-math.com/modes/chrono</loc><priority>0.6</priority></url>
   <url><loc>https://glow-math.com/modes/fractions-decimals</loc><priority>0.6</priority></url>

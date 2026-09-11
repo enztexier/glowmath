@@ -31,6 +31,25 @@ export function createTablesPreset(tables: number[]): SessionConfig {
 
 const multiplicationTables: SessionConfig = createTablesPreset([2, 3, 4, 5, 6, 7, 8, 9])
 
+const firstSteps: SessionConfig = {
+  id: 'themed-premiers-pas',
+  name: 'Premiers pas',
+  source: 'preset',
+  operations: ['addition', 'subtraction'],
+  numberTypes: {
+    integer: { enabled: true, min: 1, max: 20 },
+    decimal: { enabled: false, decimals: 1, min: 0, max: 100 },
+    fraction: { enabled: false, numeratorMax: 1, denominators: [2], simplifyResult: true, allowImproper: false },
+    allowNegative: false,
+  },
+  difficulty: { operandsCount: 2, forceCarry: null, tablesOnly: null, divisionExactOnly: true },
+  session: { mode: 'fixedCount', questionCount: 10 },
+  answer: DEFAULT_ANSWER,
+  correction: { mode: 'immediate' },
+  timing: { responseTimeSeconds: null, correctionDisplaySeconds: 3 },
+  showHints: true,
+}
+
 const quickChrono: SessionConfig = {
   id: 'themed-chrono',
   name: 'Calcul rapide / Chrono',
@@ -317,21 +336,23 @@ const chronoTwoMinutes: SessionConfig = {
   timing: DEFAULT_TIMING,
 }
 
+// Ordered from simplest to most advanced, so /modes reads as a difficulty ramp.
 export const themedPresets: SessionConfig[] = [
-  multiplicationTables,
-  quickChrono,
-  fractionsAndDecimals,
-  middleSchoolMix,
+  firstSteps,
   additionSubtraction,
+  multiplicationTables,
   multiplicationDivision,
-  survival,
-  mcqFlash,
-  percentages,
-  orderOfOperations,
-  powerAndSquareRoot,
-  rounding,
-  negativeNumbers,
   trueFalse,
-  bigNumbers,
+  mcqFlash,
+  quickChrono,
   chronoTwoMinutes,
+  survival,
+  percentages,
+  rounding,
+  orderOfOperations,
+  bigNumbers,
+  fractionsAndDecimals,
+  negativeNumbers,
+  powerAndSquareRoot,
+  middleSchoolMix,
 ]

@@ -126,6 +126,25 @@
   color: var(--color-heading);
 }
 
+.question-hint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 480px;
+  background: var(--color-panel);
+  border-radius: 30px;
+  padding: 12px 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-heading);
+  text-align: left;
+}
+
+.question-hint-icon {
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
 .answer-inline-slot {
   width: 1.6em;
   display: inline-block;
@@ -180,6 +199,11 @@
 .correction-banner.incorrect {
   background: rgba(193, 88, 59, 0.15);
   color: var(--color-incorrect);
+}
+
+.correction-banner.neutral {
+  background: var(--color-panel);
+  color: var(--color-heading);
 }
 
 .mcq-choices {

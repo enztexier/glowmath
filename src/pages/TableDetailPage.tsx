@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { findCategoryBySlug } from './tables/categories'
 import { getTableItems } from './tables/items'
@@ -40,41 +41,38 @@ function MultiplicationGrid() {
     <>
       <h2 className="subsection-title">Table générale</h2>
       <p className="content-note">
-        Chaque table a sa propre couleur, qu'on la lise en ligne ou en colonne (3 × 7 et 7 × 3 sont assortis) —
-        et la diagonale des carrés parfaits (n × n) ressort d'un coup d'œil.
+        Chaque table a sa propre couleur, qu'on la lise en ligne ou en colonne (3 × 7 et 7 × 3 sont assortis).
       </p>
       <div className="grid-scroll">
-        <table className="grid-table heatmap">
-          <thead>
-            <tr>
-              <th aria-hidden="true" />
-              {RANGE_1_TO_10.map((col) => (
-                <th key={col}>{col}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {RANGE_1_TO_10.map((row) => (
-              <tr key={row}>
-                <th>{row}</th>
-                {RANGE_1_TO_10.map((col) => {
-                  const isSquare = row === col
-                  const cellColor = rowColors[Math.max(row, col) - 1]
-                  const textColor = relativeLuminance(cellColor) > 0.45 ? textOptions.dark : textOptions.light
-                  return (
-                    <td
-                      key={col}
-                      className={isSquare ? 'square-cell' : undefined}
-                      style={{ backgroundColor: cellColor, color: textColor }}
-                    >
-                      {row * col}
-                    </td>
-                  )
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="heatmap-grid" role="table" aria-label="Table de multiplication de 1 à 10">
+          <span className="heatmap-corner" aria-hidden="true" />
+          {RANGE_1_TO_10.map((col) => (
+            <span key={col} className="heatmap-header" role="columnheader">
+              {col}
+            </span>
+          ))}
+          {RANGE_1_TO_10.map((row) => (
+            <Fragment key={row}>
+              <span className="heatmap-header" role="rowheader">
+                {row}
+              </span>
+              {RANGE_1_TO_10.map((col) => {
+                const cellColor = rowColors[Math.max(row, col) - 1]
+                const textColor = relativeLuminance(cellColor) > 0.45 ? textOptions.dark : textOptions.light
+                return (
+                  <span
+                    key={col}
+                    className="heatmap-cell"
+                    role="cell"
+                    style={{ backgroundColor: cellColor, color: textColor }}
+                  >
+                    {row * col}
+                  </span>
+                )
+              })}
+            </Fragment>
+          ))}
+        </div>
       </div>
     </>
   )

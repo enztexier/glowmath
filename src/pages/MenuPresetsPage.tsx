@@ -4,6 +4,7 @@ import { usePageMeta } from '../hooks/usePageMeta'
 import './MenuPresetsPage.css'
 
 const THEME_ICONS: Record<string, string> = {
+  'themed-premiers-pas': '1',
   'themed-tables-2-3-4-5-6-7-8-9': '×',
   'themed-chrono': '⏱',
   'themed-fractions-decimals': '½',
@@ -23,6 +24,7 @@ const THEME_ICONS: Record<string, string> = {
 }
 
 export const THEME_DESCRIPTIONS: Record<string, string> = {
+  'themed-premiers-pas': "10 additions et soustractions très simples, avec la correction expliquée à chaque question.",
   'themed-tables-2-3-4-5-6-7-8-9': 'Révise toutes les tables de multiplication, de 2 à 9.',
   'themed-chrono': "Réponds à un maximum de questions en 1 minute.",
   'themed-fractions-decimals': 'Fractions et nombres décimaux, dans les 4 opérations.',
@@ -45,7 +47,7 @@ export default function MenuPresetsPage() {
   usePageMeta({
     title: "S'entraîner",
     description:
-      "16 modes d'entraînement au calcul mental prêts à l'emploi : chrono, survie, QCM, fractions, pourcentages, priorités opératoires et plus encore.",
+      "17 modes d'entraînement au calcul mental prêts à l'emploi : chrono, survie, QCM, fractions, pourcentages, priorités opératoires et plus encore.",
   })
 
   return (
